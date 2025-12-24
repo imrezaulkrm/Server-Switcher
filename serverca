@@ -1,0 +1,43 @@
+#!/bin/bash
+# ========================================================
+# Simple SSH Server Switcher
+# Shows total servers, interactive selection, ssh <Host>
+# ========================================================
+
+CONFIG_FILE="$HOME/.ssh/config"
+
+# Check if config exists
+if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo "SSH config not found at $CONFIG_FILE"
+    exit 1
+fi
+
+# Check fzf installed
+if ! command -v fzf &> /dev/null; then
+    echo "fzf not installed. Install it first."
+    exit 1
+fi
+
+# Extract all HOST names (ignore wildcard '*')
+HOSTS=($(grep -E '^HOST ' "$CONFIG_FILE" | awk '{print $2}' | grep -v '\*'))
+
+# Check hosts found
+if [[ ${#HOSTS[@]} -eq 0 ]]; then
+    echo "No hosts found in SSH config."
+    exit 1
+fi
+
+# Show total count
+echo "Total servers found: ${#HOSTS[@]}"
+
+# Interactive selection
+SELECTED=$(printf "%s\n" "${HOSTS[@]}" | fzf --prompt="Server> " --height 20 --border)
+
+if [[ -z "$SELECTED" ]]; then
+    echo "No server selected."
+    exit 0
+fi
+
+# Connect using ssh + host name
+echo "Connecting to $SELECTED..."
+ssh "$SELECTED"
