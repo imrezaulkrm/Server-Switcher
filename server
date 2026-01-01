@@ -1,6 +1,6 @@
 #!/bin/bash
 # ========================================================
-# Simple SSH Server Switcher
+# Simple SSH Server Switcher with IP Preview
 # Shows total servers, interactive selection, ssh <Host>
 # ========================================================
 
@@ -30,9 +30,22 @@ fi
 # Show total count
 echo "Total servers found: ${#HOSTS[@]}"
 
-# Interactive selection
-SELECTED=$(printf "%s\n" "${HOSTS[@]}" | fzf --prompt="Server> " --height 20 --border)
+# Interactive selection with live IP preview
+SELECTED=$(printf "%s\n" "${HOSTS[@]}" | fzf \
+    --prompt="Server> " \
+    --height 20 \
+    --border \
+    --preview='
+        awk -v host={} "
+            \$1==\"HOST\" && \$2==host {found=1; next}
+            found && \$1==\"HOSTNAME\" {print \"IP : \" \$2; exit}
+            found && \$1==\"HOST\" {print \"IP : N/A\"; exit}
+        " '"$CONFIG_FILE"'
+    ' \
+    --preview-window=right:40%
+)
 
+# Check if user selected a host
 if [[ -z "$SELECTED" ]]; then
     echo "No server selected."
     exit 0
