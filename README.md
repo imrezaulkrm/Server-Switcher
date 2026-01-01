@@ -9,8 +9,9 @@ Perfect for Linux power users managing multiple servers. **Zero typing, instant 
 - 🔍 **Auto-detects** all servers from `~/.ssh/config` (ignores wildcards like `Host *`).
 - 📊 **Shows total server count** for quick overview.
 - 🎯 **Interactive fzf menu**: Arrow keys + type-to-search filtering.
+- 👀 **Live IP Preview**: When navigating the menu, the selected Host shows its IP in a side preview.
 - ⚡ **One-key SSH**: Runs `ssh <Host>` – auto-loads username, port, etc., from config.
-- 🌐 **System-wide install** (`/usr/local/bin/server`) for global access.
+- 🌐 **System-wide install** (`/usr/local/bin/vm`) for global access.
 - 🪶 **Lightweight & reliable**: Pure Bash, no dependencies beyond fzf.
 
 ## 📋 Requirements
@@ -44,8 +45,8 @@ sudo pacman -S fzf
 
 2. **Install system-wide**:
    ```bash
-   sudo mv server /usr/local/bin/server
-   sudo chmod +x /usr/local/bin/server
+   sudo mv server /usr/local/bin/vm
+   sudo chmod +x /usr/local/bin/vm
    ```
 
 3. **Verify PATH** (usually auto-included):
@@ -80,7 +81,7 @@ HOST "NAME"
 
 1. Run:
    ```bash
-   server
+   vm
    ```
 
 2. **Interactive Menu** appears:
@@ -93,15 +94,11 @@ HOST "NAME"
    - **↑↓ arrows** or **type to filter** (fzf magic!).
    - **Enter** to connect.
 
-3. **Auto-runs**:
-   ```bash
-   ssh monitoring  # Uses your config seamlessly
-   ```
 
 ## ⚡ Optional: Short Alias
 
 ```bash
-echo "alias ss='server'" >> ~/.bashrc  # or ~/.zshrc
+echo "alias ss='vm'" >> ~/.bashrc  # or ~/.zshrc
 source ~/.bashrc
 ```
 
@@ -117,7 +114,6 @@ Now: `ss` → instant menu! 🪄
 | `Command not found` | Add `/usr/local/bin` to `$PATH`. |
 | Slow menu? | Update fzf: `fzf --version`. |
 
-**Debug**: Run `server --debug` (if script supports; else `cat ~/.ssh/config`).
 
 ## 🔍 How It Works (Under the Hood)
 
@@ -134,7 +130,7 @@ Now: `ss` → instant menu! 🪄
 ## Folder Structure (GitHub)
 
 server-switcher/
-├── server           # Main bash script
+├── vm           # Main bash script
 ├── README.md        # This guide
 └── .gitignore       # Optional
 
@@ -142,11 +138,11 @@ server-switcher/
 
 1.  Clone repo
     
-2.  Move `server` script to `/usr/local/bin`
+2.  Move `vm` script to `/usr/local/bin`
     
 3.  Add hosts to `~/.ssh/config`
     
-4.  Run `server` (or alias `ss`)
+4.  Run `vm` (or alias `ss`)
 
 Enjoy interactive SSH access!
 
